@@ -55,10 +55,20 @@ public class BasePage extends PageObject {
 //        return find(locator).withTimeoutOf(timeout).isDisplayed();
     }
 
+    /**
+     * Enter text into a web element located by the specified locator within a given timeout.
+     *
+     * @param locator the locator used to find the web element
+     * @param text the text a user wants to enter into the web element
+     * @param timeout the maximum time to wait for the element to become clickable
+     * @throws NoSuchElementException if the element cannot be found
+     * @throws TimeoutException if the element is not clickable within the specified timeout
+     * @see org.openqa.selenium.By
+     * @see java.time.Duration
+     */
     // Common method to type text into an element
     public void typeInto(By locator, String text, Duration timeout) {
         $(locator).withTimeoutOf(timeout).type(text);
-//        find(locator).withTimeoutOf(timeout).type(text);
     }
 
     // Common method to get text from an element

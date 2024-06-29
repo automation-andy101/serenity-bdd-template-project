@@ -9,6 +9,7 @@ import java.time.Duration;
 public class HomePage extends BasePage {
 
     private final By loginButton = By.id("signin");
+    private final By usernameDropdown = By.id("#username");
 
     public HomePage(WebDriver driver) {
         super(driver);
@@ -17,4 +18,10 @@ public class HomePage extends BasePage {
     public void clickLoginButton() {
         clickOn(loginButton, Duration.ofSeconds(5));
     }
+
+    public void clickUsernameDropdown() {
+        clickOn(usernameDropdown, Duration.ofSeconds(5));
+    }
+
+
 }

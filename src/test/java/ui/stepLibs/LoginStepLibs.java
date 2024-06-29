@@ -4,20 +4,28 @@ import net.serenitybdd.annotations.Step;
 import net.thucydides.model.environment.SystemEnvironmentVariables;
 import net.thucydides.model.util.EnvironmentVariables;
 import ui.pages.HomePage;
+import ui.pages.LoginPage;
 
 public class LoginStepLibs {
-    HomePage homePage;
-
-    @Step("Open the home page")
-    public void openHomePage() {
-        EnvironmentVariables environmentVariables = SystemEnvironmentVariables.createEnvironmentVariables();
-        String projectName = environmentVariables.getProperty("serenity.project.name");
-        System.out.println("Serenity Project Name: " + projectName);
-        homePage.open();
-    }
+    LoginPage loginPage;
 
     @Step("Navigate to login page")
     public void navigateToLoginPage() {
-        homePage.clickLoginButton();
+        loginPage.open();
+    }
+
+    @Step("Enter username")
+    public void enterUsername(String username) {
+        loginPage.enterUsername(username);
+    }
+
+    @Step("Enter password")
+    public void enterPassword(String password) {
+        loginPage.enterPassword(password);
+    }
+
+    @Step("Click login button")
+    public void clickLoginButton() {
+        loginPage.clickLoginButton();
     }
 }
