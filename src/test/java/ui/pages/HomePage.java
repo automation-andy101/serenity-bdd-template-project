@@ -1,12 +1,11 @@
 package ui.pages;
 
-import net.serenitybdd.annotations.DefaultUrl;
+import net.serenitybdd.annotations.At;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
-
 import java.time.Duration;
 
-@DefaultUrl("#HOST")
+@At("#HOST")
 public class HomePage extends BasePage {
 
     private final By loginButton = By.id("signin");
