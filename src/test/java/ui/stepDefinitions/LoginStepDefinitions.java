@@ -2,9 +2,12 @@ package ui.stepDefinitions;
 
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
+import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import net.serenitybdd.annotations.Steps;
 import ui.stepLibs.LoginStepLibs;
+
+import static net.serenitybdd.core.Serenity.getDriver;
 
 public class LoginStepDefinitions {
 
@@ -27,7 +30,27 @@ public class LoginStepDefinitions {
     }
 
     @And("clicks Login button")
-    public void clickLoginButton(String password) {
+    public void clickLoginButton() {
         loginStepLibs.clickLoginButton();
+    }
+
+    @And("user is successfully logged into the app")
+    public void verifyCurrentUrlIsDashboard() {
+        loginStepLibs.verifyCurrentUrlIsDashboardPage();
+    }
+
+    @Then("user is not logged into the app")
+    public void assertUserRemainsOnLoginPage() {
+        loginStepLibs.verifyCurrentUrlIsLoginPage();
+    }
+
+    @And("dashboard header text is visible")
+    public void dashboardIsVisible() {
+        loginStepLibs.assertDashboardHeaderTextIsDisplayed();
+    }
+
+    @And("invalid credentials area is visible")
+    public void invalidCredentialsAreaIsVisible() {
+        loginStepLibs.assertInvalidCredentialsAreaIsDisplayed();
     }
 }
