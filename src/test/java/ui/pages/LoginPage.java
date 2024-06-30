@@ -14,6 +14,7 @@ public class LoginPage extends BasePage {
     private final By passwordInput = By.name("password");
     private final By loginButton = By.xpath("//button[@type='submit']");
     private final By invalidCredentialsArea = By.xpath("//div[@role='alert']");
+    private final By changeYourPasswordPopupOkButton = By.xpath("//button[text()='OK']");
 
     public LoginPage(WebDriver driver) {
         super(driver);
@@ -35,4 +36,7 @@ public class LoginPage extends BasePage {
         return isElementDisplayed(invalidCredentialsArea, Duration.ofSeconds(5));
     }
 
+    public void acknowledgeChangePasswordPopup() {
+        clickOn(changeYourPasswordPopupOkButton, Duration.ofSeconds(5));
+    }
 }

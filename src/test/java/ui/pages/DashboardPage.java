@@ -9,14 +9,14 @@ import java.time.Duration;
 @At(urls={"#HOST/web/index.php/dashboard/index"})
 public class DashboardPage extends BasePage {
 
-    private final By dshboardHeaderText = By.xpath("//h6[text()='Dashboard']");
+    private final By dashboardHeaderText = By.xpath("//h6[text()='Dashboard']");
 
     public DashboardPage(WebDriver driver) {
         super(driver);
     }
 
     public boolean isDashboardHeaderTextDisplayed() {
-        return isElementDisplayed(dshboardHeaderText, Duration.ofSeconds(5));
+        return isElementDisplayed(dashboardHeaderText, Duration.ofSeconds(5));
     }
 
 }

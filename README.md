@@ -46,5 +46,13 @@ To set up the project, follow these steps:
 
 To run the tests against the 'test' environment using the Chrome browser, use the following command:
 
-```bash
-mvn clean verify -Denvironment=test -Ddriver=firefox
+   ```bash
+   mvn clean verify -Denvironment=test -Ddriver=chrome
+   ```
+
+To run a specific feature file against the 'test' environment using the Firefox browser, use the following command:
+
+   ```bash
+   mvn clean verify -Denvironment=test -Ddriver=firefox -Dtest=Admin.feature
+   ```
+

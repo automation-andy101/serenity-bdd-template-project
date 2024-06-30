@@ -7,8 +7,6 @@ import io.cucumber.java.en.When;
 import net.serenitybdd.annotations.Steps;
 import ui.stepLibs.LoginStepLibs;
 
-import static net.serenitybdd.core.Serenity.getDriver;
-
 public class LoginStepDefinitions {
 
     @Steps

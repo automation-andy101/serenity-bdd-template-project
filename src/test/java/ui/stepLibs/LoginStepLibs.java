@@ -14,8 +14,6 @@ public class LoginStepLibs {
     LoginPage loginPage;
     DashboardPage dashboardPage;
 
-
-
     @Step("Navigate to login page")
     public void navigateToLoginPage() {
         loginPage.open();
@@ -59,4 +57,6 @@ public class LoginStepLibs {
     public void assertInvalidCredentialsAreaIsDisplayed() {
         Assert.assertTrue(loginPage.isInvalidCredentialsAreaDisplayed());
     }
+
+
 }
