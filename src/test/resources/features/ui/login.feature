@@ -15,4 +15,4 @@ Feature: Login Functionality
     And user enters "admin123" into the password input field
     And clicks Login button
     Then user is not logged into the app
-    And invalid credentials area is visible
+    And invalid credentials error area is visible

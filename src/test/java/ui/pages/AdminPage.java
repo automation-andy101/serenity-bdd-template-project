@@ -13,17 +13,19 @@ import java.time.Duration;
 public class AdminPage extends BasePage {
 
     private final By addButton = By.xpath("//div[@class='orangehrm-header-container']/button");
-    private final By userRoleDropDown = By.xpath("//div[@class='oxd-select-text-input']");
+    private final By userRoleDropDown = By.xpath("//label[text()='User Role']/parent::div/following-sibling::div");
     private final By adminDropdownMenuOption = By.xpath("//div[@class='oxd-select-option']/span[text()='Admin']");
     private final By essDropdownMenuOption = By.xpath("//div[@class='oxd-select-option']/span[text()='ESS']");
     private final By employeeNameInput = By.xpath("//input[@placeholder='Type for hints...']");
-    private final By statusDropDown = By.xpath("//div[@class='oxd-select-text-input']");
+    private final By statusDropDown = By.xpath("//label[text()='Status']/parent::div/following-sibling::div");
     private final By enabledDropdownMenuOption = By.xpath("//div[@class='oxd-select-option']/span[text()='Enabled']");
     private final By disabledDropdownMenuOption = By.xpath("//div[@class='oxd-select-option']/span[text()='Disabled']");
     private final By usernameInput = By.xpath("//label[text()='Username']/parent::div/following-sibling::div/input");
     private final By passwordInput = By.xpath("//label[text()='Password']/parent::div/following-sibling::div/input");
-
-
+    private final By confirmPasswordInput = By.xpath("//label[text()='Confirm Password']/parent::div/following-sibling::div/input");
+    private final By saveButton = By.xpath("//button[text()=' Save ']");
+    private final By toastPopup = By.id("oxd-toaster_1");
+    private final By toastPopupSuccessText = By.xpath("//div[@class='oxd-toast-content oxd-toast-content--success']/p[text()='Success']");
 
     public AdminPage(WebDriver driver) {
         super(driver);
@@ -59,10 +61,12 @@ public class AdminPage extends BasePage {
 
     public void enterEmployeesName(String name) {
         typeInto(employeeNameInput, name, Duration.ofSeconds(5));
-//        WebElementFacade element = find(employeeNameInput, Duration.ofSeconds(5));
-//        element.type(name);
-//        element.sendKeys(Keys.ARROW_DOWN);
-//        element.sendKeys(Keys.ENTER);
+    }
+
+    public void selectEmployeeName(String name) {
+        String employeeNameXpath = "//span[text()='" + name + "']";
+        By employeeNameSelection = By.xpath(employeeNameXpath);
+        clickOn(employeeNameSelection, Duration.ofSeconds(5));
     }
 
     public void enterUsername(String username) {
@@ -73,7 +77,16 @@ public class AdminPage extends BasePage {
         typeInto(passwordInput, password, Duration.ofSeconds(5));
     }
 
-    public void selectEmployeeName(String name) {
-        clickOn((WebElement) By.xpath("//span[text()='" + name + "']"));
+    public void enterConfirmPassword(String password) {
+        typeInto(confirmPasswordInput, password, Duration.ofSeconds(5));
+    }
+
+    public void clickSaveButton() {
+        clickOn(saveButton, Duration.ofSeconds(5));
+    }
+
+
+    public boolean isSuccessToastPopupVisible() {
+        return isElementDisplayed(toastPopup, Duration.ofSeconds(5));
     }
 }

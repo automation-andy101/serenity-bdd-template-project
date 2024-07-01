@@ -28,10 +28,22 @@ public class AdminStepLibs {
         adminPage.enterEmployeesName(name);
         adminPage.selectEmployeeName(name);
 
+        adminPage.openStatusDropdown();
         if (Objects.equals(status, "Enabled")) adminPage.selectEnabledOptionFromStatusDropdown();
         else adminPage.selectDisabledOptionFromStatusDropdown();
 
         adminPage.enterUsername(username);
         adminPage.enterPassword(password);
+        adminPage.enterConfirmPassword(password);
+    }
+
+    public void userClicksSaveButton() throws InterruptedException {
+//        Thread.sleep(20000);
+        adminPage.clickSaveButton();
+        Thread.sleep(5000);
+    }
+
+    public void successToastPopupIsVisible() {
+        Assert.assertTrue("Success toast popup did NOT appear", adminPage.isSuccessToastPopupVisible());
     }
 }

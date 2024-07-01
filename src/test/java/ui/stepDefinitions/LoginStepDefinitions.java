@@ -47,8 +47,8 @@ public class LoginStepDefinitions {
         loginStepLibs.assertDashboardHeaderTextIsDisplayed();
     }
 
-    @And("invalid credentials area is visible")
-    public void invalidCredentialsAreaIsVisible() {
-        loginStepLibs.assertInvalidCredentialsAreaIsDisplayed();
+    @And("invalid credentials error area is visible")
+    public void invalidCredentialsErrorAreaIsVisible() {
+        loginStepLibs.assertInvalidCredentialsErrorAreaIsDisplayed();
     }
 }

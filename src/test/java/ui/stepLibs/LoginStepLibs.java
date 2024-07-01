@@ -53,9 +53,9 @@ public class LoginStepLibs {
         Assert.assertTrue("User was incorrectly navigated away from the login page", getDriver().getCurrentUrl().contains(expectedResourceUrl));
     }
 
-    @Step("Assert Invaid Credentials area is displayed")
-    public void assertInvalidCredentialsAreaIsDisplayed() {
-        Assert.assertTrue(loginPage.isInvalidCredentialsAreaDisplayed());
+    @Step("Assert Invalid Credentials error area is displayed")
+    public void assertInvalidCredentialsErrorAreaIsDisplayed() {
+        Assert.assertTrue("Invalid credentials error area was not visible", loginPage.isInvalidCredentialsAreaDisplayed());
     }
 
 
