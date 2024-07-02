@@ -24,12 +24,17 @@ public class AdminStepDefinition {
     }
 
     @When("user clicks Save button")
-    public void userClicksSaveButton() throws InterruptedException {
+    public void userClicksSaveButton() {
         adminStepLibs.userClicksSaveButton();
     }
 
     @Then("Success toast popup appears")
-    public void successToastPopupIsVisible() throws InterruptedException {
+    public void successToastPopupIsVisible() {
         adminStepLibs.successToastPopupIsVisible();
+    }
+
+    @Then("new user card appears containing {string}, {string}, {string}, {string} and {string}")
+    public void newUserCardAppearsContainingCorrectInfo(String role, String name, String status, String username, String password) throws InterruptedException {
+        adminStepLibs.newUserCardAppearsContainingCorrectInfo();
     }
 }

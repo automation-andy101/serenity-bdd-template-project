@@ -5,6 +5,7 @@ import org.junit.Assert;
 import ui.pages.AdminPage;
 import ui.pages.DashboardPage;
 import ui.pages.LoginPage;
+import ui.utils.UIUtilityClass;
 
 import java.util.Objects;
 
@@ -14,6 +15,8 @@ public class AdminStepLibs {
     LoginPage loginPage;
     DashboardPage dashboardPage;
     AdminPage adminPage;
+
+    String username = "";
 
     @Step("Click Add button to create a new user")
     public void clickAddButton() {
@@ -32,18 +35,21 @@ public class AdminStepLibs {
         if (Objects.equals(status, "Enabled")) adminPage.selectEnabledOptionFromStatusDropdown();
         else adminPage.selectDisabledOptionFromStatusDropdown();
 
+        username = username + UIUtilityClass.generateUniqueRandomNumber();
         adminPage.enterUsername(username);
         adminPage.enterPassword(password);
         adminPage.enterConfirmPassword(password);
     }
 
-    public void userClicksSaveButton() throws InterruptedException {
-//        Thread.sleep(20000);
+    public void userClicksSaveButton() {
         adminPage.clickSaveButton();
-        Thread.sleep(5000);
     }
 
     public void successToastPopupIsVisible() {
         Assert.assertTrue("Success toast popup did NOT appear", adminPage.isSuccessToastPopupVisible());
+    }
+
+    public void newUserCardAppearsContainingCorrectInfo() {
+
     }
 }

@@ -59,6 +59,20 @@ public class BasePage extends PageObject {
     }
 
     /**
+     * checks if a web element is visible on the page within a given timeout.
+     * @param locator the locator used to find the web element
+     * @param timeout the maximum time to wait for the element to become clickable
+     * @throws NoSuchElementException if the element cannot be found
+     * @throws TimeoutException if the element is not clickable within the specified timeout
+     * @see org.openqa.selenium.By
+     * @see java.time.Duration
+     */
+    // Common method to check if an element is displayed
+    public boolean isElementVisible(By locator, Duration timeout) {
+        return $(locator).withTimeoutOf(timeout).isVisible();
+    }
+
+    /**
      * Enter text into a web element located by the specified locator within a given timeout.
      *
      * @param locator the locator used to find the web element

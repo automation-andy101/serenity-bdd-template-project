@@ -87,6 +87,6 @@ public class AdminPage extends BasePage {
 
 
     public boolean isSuccessToastPopupVisible() {
-        return isElementDisplayed(toastPopup, Duration.ofSeconds(5));
+        return isElementVisible(toastPopupSuccessText, Duration.ofSeconds(10));
     }
 }
