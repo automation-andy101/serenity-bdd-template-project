@@ -9,8 +9,8 @@ Feature: Admin Functionality
     And user enters "<role>", "<name>", "<status>", "<username>" and "<password>"
     When user clicks Save button
     Then Success toast popup appears
-    And new user card appears containing <name>, <username>, <role> and <status>
+    And new user card appears containing "<name>", "<username>", "<role>" and "<status>"
 
     Examples:
-      | role  | name          | status  | username   | password    |
-      | Admin | James  Butler | Enabled | AdminTest3 | password123 |
+      | role  | name          | status  | username  | password    |
+      | Admin | James  Butler | Enabled | AdminTest | password123 |

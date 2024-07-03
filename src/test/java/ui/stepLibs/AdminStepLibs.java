@@ -23,7 +23,8 @@ public class AdminStepLibs {
         adminPage.clickAddButton();
     }
 
-    public void userEntersNewUsersDetails(String role, String name, String status, String username, String password) {
+    @Step("Enter details for a new user")
+    public void entersNewUsersDetails(String role, String name, String status, String username, String password) {
         adminPage.openUserRoleDropdown();
         if (Objects.equals(role, "Admin")) adminPage.selectAdminOptionFromUserRoleDropdown();
         else adminPage.selectEssOptionFromUserRoleDropdown();
@@ -47,6 +48,18 @@ public class AdminStepLibs {
 
     public void successToastPopupIsVisible() {
         Assert.assertTrue("Success toast popup did NOT appear", adminPage.isSuccessToastPopupVisible());
+    }
+
+    public void searchForUser(String name, String username, String role, String status) throws InterruptedException {
+        adminPage.toggleSearchArea();
+        adminPage.enterSearchUsername(username);
+        adminPage.clickSearchUserRoleDropDown();
+        adminPage.selectOptionFromSearchUserRoleDropDown(role);
+        adminPage.enterSearchEmployeeName(name);
+        adminPage.clickSearchStatusDropDown();
+        adminPage.selectOptionFromSearchstatusDropDown(status);
+        Thread.sleep(5000);
+        adminPage.clickSearchButton();
     }
 
     public void newUserCardAppearsContainingCorrectInfo() {

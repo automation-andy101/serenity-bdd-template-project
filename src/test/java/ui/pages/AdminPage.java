@@ -8,6 +8,7 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 
 import java.time.Duration;
+import java.util.Objects;
 
 @At(urls={"#HOST/web/index.php/admin/viewSystemUsers"})
 public class AdminPage extends BasePage {
@@ -24,8 +25,22 @@ public class AdminPage extends BasePage {
     private final By passwordInput = By.xpath("//label[text()='Password']/parent::div/following-sibling::div/input");
     private final By confirmPasswordInput = By.xpath("//label[text()='Confirm Password']/parent::div/following-sibling::div/input");
     private final By saveButton = By.xpath("//button[text()=' Save ']");
-    private final By toastPopup = By.id("oxd-toaster_1");
     private final By toastPopupSuccessText = By.xpath("//div[@class='oxd-toast-content oxd-toast-content--success']/p[text()='Success']");
+    private final By toggleSearchAreaButton = By.xpath("//button/i[@class='oxd-icon bi-caret-down-fill']']");
+    private final By searchUsernameInput = By.xpath("//label[text()='Username']//parent::div/following-sibling::div/input");
+    private final By searchUserRoleDropdown = By.xpath("//label[text()='User Role']/parent::div/following-sibling::div");
+    private final By searchUserRoleDropdownAdminOption = By.xpath("//label[text()='User Role']/parent::div/following-sibling::div//span[text()='Admin']");
+    private final By searchUserRoleDropdownEssOption = By.xpath("//label[text()='User Role']/parent::div/following-sibling::div//span[text()='ESS']");
+
+    private final By searchEmployeeNameInput = By.xpath("//input[@placeholder='Type for hints...']");
+
+    private final By searchStatusDropdown = By.xpath("//label[text()='Status']/parent::div/following-sibling::div");
+    private final By searchStatusEnabledOption = By.xpath("//label[text()='Status']/parent::div/following-sibling::div//span[text()='Enabled']");
+    private final By searchStatusDisabledOption = By.xpath("//label[text()='Status']/parent::div/following-sibling::div//span[text()='Disabled']");
+
+    private final By searchButton = By.xpath("//button[text()=' Search ']");
+    private final By resetButton = By.xpath("//button[text()=' Reset ']");
+
 
     public AdminPage(WebDriver driver) {
         super(driver);
@@ -85,8 +100,51 @@ public class AdminPage extends BasePage {
         clickOn(saveButton, Duration.ofSeconds(5));
     }
 
-
     public boolean isSuccessToastPopupVisible() {
         return isElementVisible(toastPopupSuccessText, Duration.ofSeconds(10));
+    }
+
+    public void toggleSearchArea() {
+        clickOn(toggleSearchAreaButton, Duration.ofSeconds(5));
+    }
+
+    public void enterSearchUsername(String username) {
+        typeInto(searchUsernameInput, username, Duration.ofSeconds(5));
+    }
+
+    public void clickSearchUserRoleDropDown() {
+        clickOn(searchUserRoleDropdown, Duration.ofSeconds(5));
+    }
+
+    public void selectOptionFromSearchUserRoleDropDown(String name) {
+        clickOn(searchUserRoleDropdown, Duration.ofSeconds(5));
+
+        if (Objects.equals(name, "Admin")) {
+            clickOn(searchUserRoleDropdownAdminOption, Duration.ofSeconds(5));
+        } else {
+            clickOn(searchUserRoleDropdownEssOption, Duration.ofSeconds(5));
+        }
+    }
+
+    public void enterSearchEmployeeName(String name) {
+        typeInto(searchEmployeeNameInput, name, Duration.ofSeconds(5));
+    }
+
+    public void clickSearchStatusDropDown() {
+        clickOn(searchStatusDropdown, Duration.ofSeconds(5));
+    }
+
+    public void selectOptionFromSearchstatusDropDown(String status) {
+        clickOn(searchStatusDropdown, Duration.ofSeconds(5));
+
+        if (Objects.equals(status, "Enabled")) {
+            clickOn(searchStatusEnabledOption, Duration.ofSeconds(5));
+        } else {
+            clickOn(searchStatusDisabledOption, Duration.ofSeconds(5));
+        }
+    }
+
+    public void clickSearchButton() {
+        clickOn(searchButton, Duration.ofSeconds(5));
     }
 }
