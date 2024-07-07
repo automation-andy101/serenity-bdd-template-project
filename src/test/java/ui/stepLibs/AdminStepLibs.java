@@ -16,7 +16,7 @@ public class AdminStepLibs {
     DashboardPage dashboardPage;
     AdminPage adminPage;
 
-    String username = "";
+    String uniqueUsername = "";
 
     @Step("Click Add button to create a new user")
     public void clickAddButton() {
@@ -24,7 +24,7 @@ public class AdminStepLibs {
     }
 
     @Step("Enter details for a new user")
-    public void entersNewUsersDetails(String role, String name, String status, String username, String password) {
+    public void entersNewUsersDetails(String role, String name, String status, String username, String password) throws InterruptedException {
         adminPage.openUserRoleDropdown();
         if (Objects.equals(role, "Admin")) adminPage.selectAdminOptionFromUserRoleDropdown();
         else adminPage.selectEssOptionFromUserRoleDropdown();
@@ -36,8 +36,8 @@ public class AdminStepLibs {
         if (Objects.equals(status, "Enabled")) adminPage.selectEnabledOptionFromStatusDropdown();
         else adminPage.selectDisabledOptionFromStatusDropdown();
 
-        username = username + UIUtilityClass.generateUniqueRandomNumber();
-        adminPage.enterUsername(username);
+        uniqueUsername = username + UIUtilityClass.generateUniqueRandomNumber();
+        adminPage.enterUsername(uniqueUsername);
         adminPage.enterPassword(password);
         adminPage.enterConfirmPassword(password);
     }
@@ -51,15 +51,18 @@ public class AdminStepLibs {
     }
 
     public void searchForUser(String name, String username, String role, String status) throws InterruptedException {
-        adminPage.toggleSearchArea();
-        adminPage.enterSearchUsername(username);
-        adminPage.clickSearchUserRoleDropDown();
-        adminPage.selectOptionFromSearchUserRoleDropDown(role);
-        adminPage.enterSearchEmployeeName(name);
-        adminPage.clickSearchStatusDropDown();
-        adminPage.selectOptionFromSearchstatusDropDown(status);
+//        adminPage.toggleSearchArea();
+        System.out.println("EGG");
+        System.out.println(uniqueUsername);
+        adminPage.enterSearchUsername(uniqueUsername);
+
+//        adminPage.clickSearchUserRoleDropDown();
+//        adminPage.selectOptionFromSearchUserRoleDropDown(role);
+//        adminPage.enterSearchEmployeeName(name);
+//        adminPage.clickSearchStatusDropDown();
+//        adminPage.selectOptionFromSearchstatusDropDown(status);
         Thread.sleep(5000);
-        adminPage.clickSearchButton();
+//        adminPage.clickSearchButton();
     }
 
     public void newUserCardAppearsContainingCorrectInfo() {

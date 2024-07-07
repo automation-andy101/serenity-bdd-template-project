@@ -12,5 +12,5 @@ Feature: Admin Functionality
     And new user card appears containing "<name>", "<username>", "<role>" and "<status>"
 
     Examples:
-      | role  | name          | status  | username  | password    |
-      | Admin | James  Butler | Enabled | AdminTest | password123 |
+      | role  | name                 | status  | username  | password    |
+      | Admin | Vasanth Amala Joslin | Enabled | AdminTest | password123 |

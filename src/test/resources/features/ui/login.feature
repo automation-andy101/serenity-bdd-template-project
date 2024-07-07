@@ -1,5 +1,8 @@
 Feature: Login Functionality
 
+  As a Orange HRM user, I want to be able to log in to the application
+  so that I can access my personalized dashboard and features.
+
   Background:
     Given user is on the Orange HRM Live login page
 

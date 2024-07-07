@@ -2,15 +2,14 @@ package ui.pages;
 
 import net.serenitybdd.core.pages.PageObject;
 import net.serenitybdd.core.pages.WebElementFacade;
-import org.openqa.selenium.By;
-import org.openqa.selenium.NoSuchElementException;
-import org.openqa.selenium.TimeoutException;
-import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.*;
+
 import java.time.Duration;
 
 public class BasePage extends PageObject {
     public BasePage(WebDriver driver) {
         super(driver);
+        driver.manage().window().maximize();
     }
 
     // Common method to open a URL
@@ -86,6 +85,33 @@ public class BasePage extends PageObject {
     // Common method to type text into an element
     public void typeInto(By locator, String text, Duration timeout) {
         $(locator).withTimeoutOf(timeout).type(text);
+    }
+
+    /**
+     * Enter text into a web element located by the specified locator within a given timeout.
+     *
+     * @param locator the locator used to find the web element
+     * @param text the text a user wants to enter into the web element
+     * @param timeout the maximum time to wait for the element to become clickable
+     * @throws NoSuchElementException if the element cannot be found
+     * @throws TimeoutException if the element is not clickable within the specified timeout
+     * @see org.openqa.selenium.By
+     * @see java.time.Duration
+     */
+    // Common method to type text into an element
+    public void typeIntoUsingJavascriptExecutor (By locator, String text, Duration timeout) {
+        // Use JavaScript to click the element
+        JavascriptExecutor js = (JavascriptExecutor) getDriver();
+        js.executeScript("arguments[0].value='" + text + "';", $(locator).withTimeoutOf(timeout));
+
+//        // Optionally, you can add some delay to see the click action
+//        try {
+//            Thread.sleep(2000);
+//        } catch (InterruptedException e) {
+//            e.printStackTrace();
+//        }
+//
+//        $(locator).withTimeoutOf(timeout).type(text);
     }
 
     // Common method to get text from an element

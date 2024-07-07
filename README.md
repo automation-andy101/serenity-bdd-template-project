@@ -56,3 +56,16 @@ To run a specific feature file against the 'test' environment using the Firefox 
    mvn clean verify -Denvironment=test -Ddriver=firefox -Dtest=Admin.feature
    ```
 
+To run in debug mode using the following command:
+
+   ```bash
+   $env:MAVEN_OPTS="-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5005"
+mvn clean verify -Denvironment=test -Ddriver=chrome
+   ```
+
+To run API tests against a specific environment:-
+
+   ```bash
+  mvn clean verify -Dapi.base.url=http://localhost:3001
+   ```
+

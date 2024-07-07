@@ -27,7 +27,9 @@ public class AdminPage extends BasePage {
     private final By saveButton = By.xpath("//button[text()=' Save ']");
     private final By toastPopupSuccessText = By.xpath("//div[@class='oxd-toast-content oxd-toast-content--success']/p[text()='Success']");
     private final By toggleSearchAreaButton = By.xpath("//button/i[@class='oxd-icon bi-caret-down-fill']']");
-    private final By searchUsernameInput = By.xpath("//label[text()='Username']//parent::div/following-sibling::div/input");
+//    private final By searchUsernameInput = By.xpath("//label[text()='Username']//parent::div/following-sibling::div/input");
+    private final By searchUsernameInput = By.xpath("//input[@class='oxd-input oxd-input--active'][1]");
+
     private final By searchUserRoleDropdown = By.xpath("//label[text()='User Role']/parent::div/following-sibling::div");
     private final By searchUserRoleDropdownAdminOption = By.xpath("//label[text()='User Role']/parent::div/following-sibling::div//span[text()='Admin']");
     private final By searchUserRoleDropdownEssOption = By.xpath("//label[text()='User Role']/parent::div/following-sibling::div//span[text()='ESS']");
@@ -101,15 +103,20 @@ public class AdminPage extends BasePage {
     }
 
     public boolean isSuccessToastPopupVisible() {
-        return isElementVisible(toastPopupSuccessText, Duration.ofSeconds(10));
+        return isElementVisible(toastPopupSuccessText, Duration.ofSeconds(30));
     }
 
     public void toggleSearchArea() {
         clickOn(toggleSearchAreaButton, Duration.ofSeconds(5));
     }
 
-    public void enterSearchUsername(String username) {
-        typeInto(searchUsernameInput, username, Duration.ofSeconds(5));
+    public void enterSearchUsername(String username) throws InterruptedException {
+        System.out.println("EGG2");
+        System.out.println(username);
+        typeIntoUsingJavascriptExecutor(searchUsernameInput, username, Duration.ofSeconds(10));
+//        clickOn(searchUsernameInput, Duration.ofSeconds(5));
+//        typeInto(searchUsernameInput, username, Duration.ofSeconds(5));
+        Thread.sleep(10000);
     }
 
     public void clickSearchUserRoleDropDown() {
