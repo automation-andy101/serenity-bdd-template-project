@@ -23,7 +23,7 @@ public class RestRequestsStepLib {
     private String adminPassword = environmentVariables.getProperty("restful.booker.api.admin.password");
 
     private Response response;
-    private static String token;
+    private String token;
 
     private Response serenityGetTokenPostRequest() {
 //        if (token == null) {
@@ -50,6 +50,14 @@ public class RestRequestsStepLib {
 //        return token;
     }
 
+    private Response serenityPostRequest(String requestBody) {
+        return response = SerenityRest.given()
+                .contentType("application/json")
+                .post(requestBody)
+                .then()
+                .extract().response();
+    }
+
     private Response serenityRestGetRequest(String url, String token) {
         return RestAssured.given()
                 .header("Cookie", "token=" + token)
@@ -57,9 +65,26 @@ public class RestRequestsStepLib {
     }
 
     public String getAuthTokenForAdminUser() throws JsonProcessingException {
-        AuthTokenResponse authTokenResponse = mapper.readValue(serenityGetTokenPostRequest().getBody().asString(), AuthTokenResponse.class);
+        if (token == null) {
+            AuthTokenRequest authTokenRequest = new AuthTokenRequest();
+            authTokenRequest.setUsername(adminUsername);
+            authTokenRequest.setPassword(adminPassword);
 
-        return authTokenResponse.getToken();
+            ObjectMapper objectMapper = new ObjectMapper();
+            String requestBody;
+
+            try {
+                requestBody = objectMapper.writeValueAsString(authTokenRequest);
+            } catch (JsonProcessingException e) {
+                throw new RuntimeException("Failed to serialize request body", e);
+            }
+
+            AuthTokenResponse authTokenResponse = mapper.readValue(serenityPostRequest(requestBody).getBody().asString(), AuthTokenResponse.class);
+
+            return authTokenResponse.getToken();
+        } else {
+            return token;
+        }
     }
 
 }
