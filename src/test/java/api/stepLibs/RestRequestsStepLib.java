@@ -1,10 +1,9 @@
 package api.stepLibs;
 
 import api.models.request.AuthTokenRequest;
-import api.models.response.AuthTokenResponse;
-import api.models.response.BookingDetailsResponse;
-import api.models.response.BookingId;
-import api.models.response.BookingIdsResponse;
+import api.models.request.CreateBookingRequest;
+import api.models.response.*;
+import api.testData.BookingTestData;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -47,7 +46,7 @@ public class RestRequestsStepLib {
                 .extract().response();
     }
 
-    private Response serenityPostRequest(String url, String requestBody, String token) {
+    private Response serenityPostRequest(String url, Object requestBody, String token) {
         return response = SerenityRest.given()
                 .contentType("application/json")
                 .header("Cookie", "token=" + token)
@@ -126,4 +125,14 @@ public class RestRequestsStepLib {
         return mapper.readValue(serenityRestGetRequest(url, token).getBody().asString(), BookingDetailsResponse.class);
     }
 
+    public CreateBookingResponse createNewBooking(String firstname, String lastname, int totalprice, boolean depositpaid, String checkinDate, String checkoutDate, String additionalneeds) throws JsonProcessingException {
+        String url = hostUrl + environmentVariables.getProperty("create.new.booking");
+        String token = getAuthTokenForAdminUser();
+
+        CreateBookingRequest createBookingRequest = BookingTestData.createBookingDetails();
+
+        return mapper.readValue(serenityPostRequest(url, createBookingRequest, token).getBody().asString(), CreateBookingResponse.class)
+
+
+    }
 }
