@@ -1,6 +1,7 @@
 package api.testData;
 
 import api.models.request.CreateBookingRequest;
+import api.models.request.UpdateBookingRequest;
 import api.models.response.BookingDates;
 
 public class BookingTestData {
@@ -20,8 +21,8 @@ public class BookingTestData {
         return createBookingRequest;
     }
 
-    public static CreateBookingRequest createBookingDetails(String checkinDate, String checkoutDate, String firstname, String lastname,
-                                                      int totalPrice, boolean depositPaid, String additionalNeeds) {
+    public static CreateBookingRequest createBookingDetails(String firstname, String lastname, int totalPrice, boolean depositPaid,
+                                                            String checkinDate, String checkoutDate, String additionalNeeds) {
         BookingDates bookingDates = new BookingDates();
         bookingDates.setCheckin(checkinDate);
         bookingDates.setCheckout(checkoutDate);
@@ -35,5 +36,38 @@ public class BookingTestData {
         createBookingRequest.setAdditionalneeds(additionalNeeds);
 
         return createBookingRequest;
+    }
+
+    public static UpdateBookingRequest updateBookingDetails() {
+        BookingDates bookingDates = new BookingDates();
+        bookingDates.setCheckin("2018-01-01");
+        bookingDates.setCheckout("2019-01-01");
+
+        UpdateBookingRequest updateBookingRequest = new UpdateBookingRequest();
+        updateBookingRequest.setFirstname("Jim");
+        updateBookingRequest.setLastname("Brown");
+        updateBookingRequest.setTotalprice(111);
+        updateBookingRequest.setDepositpaid(true);
+        updateBookingRequest.setBookingdates(bookingDates);
+        updateBookingRequest.setAdditionalneeds("Breakfast");
+
+        return updateBookingRequest;
+    }
+
+    public static UpdateBookingRequest updateBookingDetails(String firstname, String lastname, int totalPrice, boolean depositPaid,
+                                                            String checkinDate, String checkoutDate, String additionalNeeds) {
+        BookingDates bookingDates = new BookingDates();
+        bookingDates.setCheckin(checkinDate);
+        bookingDates.setCheckout(checkoutDate);
+
+        UpdateBookingRequest updateBookingRequest = new UpdateBookingRequest();
+        updateBookingRequest.setFirstname(firstname);
+        updateBookingRequest.setLastname(lastname);
+        updateBookingRequest.setTotalprice(totalPrice);
+        updateBookingRequest.setDepositpaid(depositPaid);
+        updateBookingRequest.setBookingdates(bookingDates);
+        updateBookingRequest.setAdditionalneeds(additionalNeeds);
+
+        return updateBookingRequest;
     }
 }
