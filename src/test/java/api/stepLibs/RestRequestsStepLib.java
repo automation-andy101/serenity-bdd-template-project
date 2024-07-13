@@ -17,6 +17,7 @@ import io.restassured.response.Response;
 import org.apache.commons.lang3.tuple.Pair;
 
 import java.util.List;
+import java.util.Map;
 
 public class RestRequestsStepLib {
     // Get the host url from the command line run argument
@@ -110,14 +111,28 @@ public class RestRequestsStepLib {
         return Pair.of(response, statusCode);
     }
 
-    private Response serenityRestPatchRequest(String url, String requestBody, String token) {
-        return SerenityRest.given()
+//    private Response serenityRestPatchRequest(String url, String requestBody, String token) {
+//        return SerenityRest.given()
+//                .contentType("application/json")
+//                .header("Cookie", "token=" + token)
+//                .body(requestBody)
+//                .put(url)
+//                .then()
+//                .extract().response();
+//    }
+
+    private Pair<Response, Integer>  serenityRestPatchRequest(String url, String requestBody, String token) {
+        Response response = SerenityRest.given()
                 .contentType("application/json")
                 .header("Cookie", "token=" + token)
                 .body(requestBody)
                 .put(url)
                 .then()
                 .extract().response();
+
+        int statusCode = response.getStatusCode();
+
+        return Pair.of(response, statusCode);
     }
 
 //    private Response serenityRestDeleteRequest(String url, String token) {
@@ -247,6 +262,22 @@ public class RestRequestsStepLib {
         UpdateBookingRequest updateBookingRequest = BookingTestData.updateBookingDetails(firstname, lastname, totalPrice, depositPaid, checkinDate, checkoutDate, additionalNeeds);
 
         Pair<Response, Integer> responsePair = serenityRestPutRequest(url, updateBookingRequest, token);
+        Response response = responsePair.getLeft();
+        int statusCode = responsePair.getRight();
+
+        UpdateBookingResponse updateBookingResponse = mapper.readValue(response.getBody().asString(), UpdateBookingResponse.class);
+
+        return Pair.of(updateBookingResponse, statusCode);
+    }
+
+    public Pair<UpdateBookingResponse, Integer> partialUpdateBooking(int id, Map<String, Object> partialUpdateFields) throws JsonProcessingException {
+        String url = hostUrl + environmentVariables.getProperty("partial.update.booking");
+        url = url.replace("ID", Integer.toString(id));
+
+        String token = getAuthTokenForAdminUser();
+//        UpdateBookingRequest updateBookingRequest = BookingTestData.updateBookingDetails(firstname, lastname, totalPrice, depositPaid, checkinDate, checkoutDate, additionalNeeds);
+
+        Pair<Response, Integer> responsePair = serenityRestPutRequest(url, partialUpdateFields, token);
         Response response = responsePair.getLeft();
         int statusCode = responsePair.getRight();
 
