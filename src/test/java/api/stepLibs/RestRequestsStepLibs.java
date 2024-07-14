@@ -6,6 +6,7 @@ import api.models.request.UpdateBookingRequest;
 import api.models.response.*;
 import api.testData.BookingTestData;
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import net.serenitybdd.rest.SerenityRest;
@@ -14,11 +15,14 @@ import net.thucydides.model.util.EnvironmentVariables;
 import io.restassured.response.Response;
 import org.apache.commons.lang3.tuple.Pair;
 
+import java.util.List;
 import java.util.Map;
+
+import static java.util.List.of;
 
 public class RestRequestsStepLibs {
     // Get the host url from the command line run argument
-    private String hostUrl = System.getProperty("api.base.url");
+//    private String hostUrl = System.getProperty("api.base.url");
 
     private final ObjectMapper mapper = new ObjectMapper().configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 
@@ -26,14 +30,17 @@ public class RestRequestsStepLibs {
     EnvironmentVariables environmentVariables = SystemEnvironmentVariables.createEnvironmentVariables();
     private String adminUsername = environmentVariables.getProperty("restful.booker.api.admin.username");
     private String adminPassword = environmentVariables.getProperty("restful.booker.api.admin.password");
+    private String hostUrl = environmentVariables.getProperty("restful.booker.api.env.dev.base.url");
 
     private Response response;
     private String token;
 
-    private Response serenityGetTokenPostRequest(String url, String requestBody) {
+    private Response serenityGetTokenPostRequest(String url, Object requestBody) {
             return response = SerenityRest.given()
+                    .log().all()
                     .contentType("application/json")
-                    .post(requestBody)
+                    .body(requestBody)
+                    .post(url)
                     .then()
                     .extract().response();
     }
@@ -49,11 +56,12 @@ public class RestRequestsStepLibs {
 
     private Pair<Response, Integer> serenityRestGetRequest(String url, String token) {
          Response response = SerenityRest.given()
-                .contentType("application/json")
-                .header("Cookie", "token=" + token)
-                .get(url)
-                .then()
-                .extract().response();
+                 .log().all()
+                 .contentType("application/json")
+                 .header("Cookie", "token=" + token)
+                 .get(url)
+                 .then()
+                 .extract().response();
 
         int statusCode = response.getStatusCode();
 
@@ -72,12 +80,13 @@ public class RestRequestsStepLibs {
 
     private Pair<Response, Integer> serenityPostRequest(String url, Object requestBody, String token) {
          Response response = SerenityRest.given()
-                .contentType("application/json")
-                .header("Cookie", "token=" + token)
-                .body(requestBody)
-                .post(url)
-                .then()
-                .extract().response();
+                 .log().all()
+                 .contentType("application/json")
+                 .header("Cookie", "token=" + token)
+                 .body(requestBody)
+                 .post(url)
+                 .then()
+                 .extract().response();
 
          int statusCode = response.statusCode();
 
@@ -96,6 +105,7 @@ public class RestRequestsStepLibs {
 
     private Pair<Response, Integer> serenityRestPutRequest(String url, Object requestBody, String token) {
         Response response = SerenityRest.given()
+                .log().all()
                 .contentType("application/json")
                 .header("Cookie", "token=" + token)
                 .body(requestBody)
@@ -120,6 +130,7 @@ public class RestRequestsStepLibs {
 
     private Pair<Response, Integer>  serenityRestPatchRequest(String url, String requestBody, String token) {
         Response response = SerenityRest.given()
+                .log().all()
                 .contentType("application/json")
                 .header("Cookie", "token=" + token)
                 .body(requestBody)
@@ -143,6 +154,7 @@ public class RestRequestsStepLibs {
 
     private Pair<Response, Integer> serenityRestDeleteRequest(String url, String token) {
         Response response = SerenityRest.given()
+                .log().all()
                 .contentType("application/json")
                 .header("Cookie", "token=" + token)
                 .delete(url)
@@ -157,36 +169,15 @@ public class RestRequestsStepLibs {
     public String getAuthTokenForAdminUser() throws JsonProcessingException {
         if (token == null) {
             String url = hostUrl + environmentVariables.getProperty("get.token");
-
-            AuthTokenRequest authTokenRequest = new AuthTokenRequest();
-            authTokenRequest.setUsername(adminUsername);
-            authTokenRequest.setPassword(adminPassword);
-
-            ObjectMapper objectMapper = new ObjectMapper();
-            String requestBody;
-
-            try {
-                requestBody = objectMapper.writeValueAsString(authTokenRequest);
-            } catch (JsonProcessingException e) {
-                throw new RuntimeException("Failed to serialize request body", e);
-            }
-
-            AuthTokenResponse authTokenResponse = mapper.readValue(serenityGetTokenPostRequest(url, requestBody).getBody().asString(), AuthTokenResponse.class);
-
+            AuthTokenRequest authTokenRequest = BookingTestData.createAuthTokenRequestBody(adminUsername, adminPassword);
+            AuthTokenResponse authTokenResponse = mapper.readValue(serenityGetTokenPostRequest(url, authTokenRequest).getBody().asString(), AuthTokenResponse.class);
             return authTokenResponse.getToken();
         } else {
             return token;
         }
     }
 
-//    public BookingIdsResponse getBookingIds() throws JsonProcessingException {
-//        String url = hostUrl + environmentVariables.getProperty("get.booking.ids");
-//        String token = getAuthTokenForAdminUser();
-//
-//        return mapper.readValue(serenityRestGetRequest(url, token).getBody().asString(), BookingIdsResponse.class);
-//    }
-
-    public Pair<BookingIdsResponse, Integer> getBookingIds() throws JsonProcessingException {
+    public Pair<List<BookingId>, Integer> getBookingIds() throws JsonProcessingException {
         String url = hostUrl + environmentVariables.getProperty("get.booking.ids");
         String token = getAuthTokenForAdminUser();
 
@@ -194,7 +185,13 @@ public class RestRequestsStepLibs {
         Response response = responsePair.getLeft();
         int statusCode = responsePair.getRight();
 
-        BookingIdsResponse bookingIdsResponse = mapper.readValue(response.getBody().asString(), BookingIdsResponse.class);
+//        List<BookingId> bookingIdsResponse = mapper.readValue(response.getBody().asString(), BookingIdsResponse.class);
+        List<BookingId> bookingIdsResponse = mapper.readValue(response.getBody().asString(), new TypeReference<List<BookingId>>(){});
+//        List<BookingId> bookingIdsResponse = List.of(mapper.readValue(response.getBody().asString(), BookingIdsResponse.class).getBookingIds());
+//        List<BookingId> bookingIdsResponse = mapper.readValue(response.getBody().asString(), BookingIdsResponse.class);
+
+        System.out.println("CHIPS AND BEANS - ");
+        System.out.println(bookingIdsResponse.get(1).toString());
 
         return  Pair.of(bookingIdsResponse, statusCode);
     }

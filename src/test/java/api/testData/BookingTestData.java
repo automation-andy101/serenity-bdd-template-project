@@ -1,10 +1,19 @@
 package api.testData;
 
+import api.models.request.AuthTokenRequest;
 import api.models.request.CreateBookingRequest;
 import api.models.request.UpdateBookingRequest;
 import api.models.response.BookingDates;
 
 public class BookingTestData {
+    public static AuthTokenRequest createAuthTokenRequestBody(String username, String password) {
+        AuthTokenRequest authTokenRequest = new AuthTokenRequest();
+        authTokenRequest.setUsername(username);
+        authTokenRequest.setPassword(password);
+
+        return authTokenRequest;
+    }
+
     public static CreateBookingRequest createBookingDetails() {
         BookingDates bookingDates = new BookingDates();
         bookingDates.setCheckin("2018-01-01");
