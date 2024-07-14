@@ -50,10 +50,10 @@ To run the tests against the 'test' environment using the Chrome browser, use th
    mvn clean verify -Denvironment=test -Ddriver=chrome
    ```
 
-To run a specific feature file against the 'test' environment using the Firefox browser, use the following command:
+To run a specific feature file against the 'test' environment using the Chrome browser, use the following command:
 
    ```bash
-   mvn clean verify -Denvironment=test -Ddriver=firefox -Dtest=Admin.feature
+   mvn clean verify -Denvironment=test -Ddriver=chrome -Dtest=Admin.feature
    ```
 
 To run in debug mode using the following command:

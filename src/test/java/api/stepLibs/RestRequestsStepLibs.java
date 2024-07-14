@@ -8,18 +8,15 @@ import api.testData.BookingTestData;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import io.cucumber.java.sl.In;
-import io.restassured.RestAssured;
 import net.serenitybdd.rest.SerenityRest;
 import net.thucydides.model.environment.SystemEnvironmentVariables;
 import net.thucydides.model.util.EnvironmentVariables;
 import io.restassured.response.Response;
 import org.apache.commons.lang3.tuple.Pair;
 
-import java.util.List;
 import java.util.Map;
 
-public class RestRequestsStepLib {
+public class RestRequestsStepLibs {
     // Get the host url from the command line run argument
     private String hostUrl = System.getProperty("api.base.url");
 
