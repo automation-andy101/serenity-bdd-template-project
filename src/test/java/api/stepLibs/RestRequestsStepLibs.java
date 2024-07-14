@@ -185,13 +185,7 @@ public class RestRequestsStepLibs {
         Response response = responsePair.getLeft();
         int statusCode = responsePair.getRight();
 
-//        List<BookingId> bookingIdsResponse = mapper.readValue(response.getBody().asString(), BookingIdsResponse.class);
         List<BookingId> bookingIdsResponse = mapper.readValue(response.getBody().asString(), new TypeReference<List<BookingId>>(){});
-//        List<BookingId> bookingIdsResponse = List.of(mapper.readValue(response.getBody().asString(), BookingIdsResponse.class).getBookingIds());
-//        List<BookingId> bookingIdsResponse = mapper.readValue(response.getBody().asString(), BookingIdsResponse.class);
-
-        System.out.println("CHIPS AND BEANS - ");
-        System.out.println(bookingIdsResponse.get(1).toString());
 
         return  Pair.of(bookingIdsResponse, statusCode);
     }
