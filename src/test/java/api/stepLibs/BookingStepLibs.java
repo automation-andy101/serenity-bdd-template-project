@@ -1,21 +1,28 @@
 package api.stepLibs;
 
+import api.hooks.ApiHooks;
+import api.models.request.CreateBookingRequest;
+import api.models.response.BookingDetailsResponse;
 import api.models.response.BookingId;
+import api.models.response.CreateBookingResponse;
+import api.testData.BookingTestData;
 import com.fasterxml.jackson.core.JsonProcessingException;
+import io.cucumber.datatable.DataTable;
 import io.cucumber.java.bs.A;
 import net.serenitybdd.annotations.Step;
 import org.apache.commons.lang3.tuple.Pair;
 import org.hamcrest.MatcherAssert;
 import org.junit.Assert;
-
 import java.util.List;
-
-import static net.serenitybdd.core.Serenity.getDriver;
+import java.util.Map;
 import static org.hamcrest.CoreMatchers.equalTo;
 
 public class BookingStepLibs {
 
-    Pair<List<BookingId>, Integer> bookingIdsResponse;
+    public Pair<List<BookingId>, Integer> bookingIdsResponse;
+    public Pair<CreateBookingResponse, Integer> createNewBookingResp;
+    public Pair<BookingDetailsResponse, Integer> getBookingByIdResp;
+    public int newBookingId;
 
     @Step("Request List of Bookings")
     public void requestListOfBookings() throws JsonProcessingException {
@@ -28,9 +35,52 @@ public class BookingStepLibs {
         Assert.assertFalse(bookingIdsResponse.getLeft().isEmpty());
     }
 
-    @Step("Validate Response status code is 200")
-    public void validateResponseStatusCode(int expectedStatusCode) {
-//        Assert.assertTrue(bookingIdsResponse.getRight().compareTo(200));
+    @Step("Validate Get Bookings Response status code is 200")
+    public void validateGetBookingsResponseStatusCode(int expectedStatusCode) {
         MatcherAssert.assertThat(bookingIdsResponse.getRight(), equalTo(expectedStatusCode));
+    }
+
+    @Step("Create a new booking")
+    public void createNewBooking(DataTable dataTable) throws JsonProcessingException {
+        Map<String, String> bookingDetails = dataTable.asMap(String.class, String.class);
+
+        CreateBookingRequest newBookingPayload = BookingTestData.createBookingDetails(
+                bookingDetails.get("firstname"),
+                bookingDetails.get("lastname"),
+                Integer.parseInt(bookingDetails.get("totalprice")),
+                Boolean.parseBoolean(bookingDetails.get("depositpaid")),
+                bookingDetails.get("checkin"),
+                bookingDetails.get("checkout"),
+                bookingDetails.get("additionalneeds")
+        );
+
+        RestRequestsStepLibs restRequestsStepLibs = new RestRequestsStepLibs();
+        createNewBookingResp = restRequestsStepLibs.createNewBooking(newBookingPayload);
+        newBookingId = createNewBookingResp.getLeft().getBookingid();
+        ApiHooks.bookingId = newBookingId;
+    }
+
+    @Step("Get booking by ID")
+    public void getBookingById() throws JsonProcessingException {
+        RestRequestsStepLibs restRequestsStepLibs = new RestRequestsStepLibs();
+        getBookingByIdResp = restRequestsStepLibs.getBookingById(newBookingId);
+    }
+
+    @Step("Validate Get Booking By id Response status code is 200")
+    public void validateGetBookingByIdResponseStatusCode(int expectedStatusCode) {
+        MatcherAssert.assertThat(getBookingByIdResp.getRight(), equalTo(expectedStatusCode));
+    }
+
+    @Step("Validate Get Booking By id Response Body contains the correct details")
+    public void validateGetBookingByIdResponseBodyContainsCorrectDetails(DataTable dataTable) {
+        Map<String, String> bookingDetails = dataTable.asMap(String.class, String.class);
+
+        MatcherAssert.assertThat(getBookingByIdResp.getLeft().getFirstname(), equalTo(bookingDetails.get("firstname")));
+        MatcherAssert.assertThat(getBookingByIdResp.getLeft().getLastname(), equalTo(bookingDetails.get("lastname")));
+        MatcherAssert.assertThat(getBookingByIdResp.getLeft().getTotalprice(), equalTo(Integer.parseInt(bookingDetails.get("totalprice"))));
+        MatcherAssert.assertThat(getBookingByIdResp.getLeft().isDepositpaid(), equalTo(Boolean.parseBoolean(bookingDetails.get("depositpaid"))));
+        MatcherAssert.assertThat(getBookingByIdResp.getLeft().getBookingdates().getCheckin(), equalTo(bookingDetails.get("checkin")));
+        MatcherAssert.assertThat(getBookingByIdResp.getLeft().getBookingdates().getCheckout(), equalTo(bookingDetails.get("checkout")));
+        MatcherAssert.assertThat(getBookingByIdResp.getLeft().getAdditionalneeds(), equalTo(bookingDetails.get("additionalneeds")));
     }
 }

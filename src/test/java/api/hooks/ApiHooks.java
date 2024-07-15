@@ -12,22 +12,22 @@ import net.serenitybdd.annotations.Steps;
 import org.apache.commons.lang3.tuple.Pair;
 
 public class ApiHooks {
-    public static int id;
+    public static int bookingId;
 
     @Before("@createBookingBeforeHook")
     public void createBookingBeforeTest() throws JsonProcessingException {
-        int id = 0;
+        int bookingId = 0;
 
         RestRequestsStepLibs restRequestsStepLibs = new  RestRequestsStepLibs();
         Pair<CreateBookingResponse, Integer> beforeHookBooking = restRequestsStepLibs.createNewBooking("testFirstname",
                 "testLastname", 200, true, "2024-07-14", "2024-07-21", "Breakfast");
 
-        id = beforeHookBooking.getLeft().getBookingid();
+        bookingId = beforeHookBooking.getLeft().getBookingid();
     }
 
     @After("@deleteBookingAfterHook")
     public void deleteBookingAfterTest() throws JsonProcessingException {
         RestRequestsStepLibs restRequestsStepLibs = new  RestRequestsStepLibs();
-        Pair<Response, Integer> afterHookBooking = restRequestsStepLibs.deleteBooking(id);
+        Pair<Response, Integer> afterHookBooking = restRequestsStepLibs.deleteBooking(bookingId);
     }
 }

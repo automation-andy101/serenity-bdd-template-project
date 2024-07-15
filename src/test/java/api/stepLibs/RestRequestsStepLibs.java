@@ -45,15 +45,6 @@ public class RestRequestsStepLibs {
                     .extract().response();
     }
 
-//    private Response serenityRestGetRequest(String url, String token) {
-//        return SerenityRest.given()
-//                .contentType("application/json")
-//                .header("Cookie", "token=" + token)
-//                .get(url)
-//                .then()
-//                .extract().response();
-//    }
-
     private Pair<Response, Integer> serenityRestGetRequest(String url, String token) {
          Response response = SerenityRest.given()
                  .log().all()
@@ -67,16 +58,6 @@ public class RestRequestsStepLibs {
 
         return Pair.of(response, statusCode);
     }
-
-//    private Response serenityPostRequest(String url, Object requestBody, String token) {
-//        return response = SerenityRest.given()
-//                .contentType("application/json")
-//                .header("Cookie", "token=" + token)
-//                .body(requestBody)
-//                .post(url)
-//                .then()
-//                .extract().response();
-//    }
 
     private Pair<Response, Integer> serenityPostRequest(String url, Object requestBody, String token) {
          Response response = SerenityRest.given()
@@ -93,16 +74,6 @@ public class RestRequestsStepLibs {
          return Pair.of(response, statusCode);
     }
 
-//    private Response serenityRestPutRequest(String url, Object requestBody, String token) {
-//        return SerenityRest.given()
-//                .contentType("application/json")
-//                .header("Cookie", "token=" + token)
-//                .body(requestBody)
-//                .put(url)
-//                .then()
-//                .extract().response();
-//    }
-
     private Pair<Response, Integer> serenityRestPutRequest(String url, Object requestBody, String token) {
         Response response = SerenityRest.given()
                 .log().all()
@@ -118,16 +89,6 @@ public class RestRequestsStepLibs {
         return Pair.of(response, statusCode);
     }
 
-//    private Response serenityRestPatchRequest(String url, String requestBody, String token) {
-//        return SerenityRest.given()
-//                .contentType("application/json")
-//                .header("Cookie", "token=" + token)
-//                .body(requestBody)
-//                .put(url)
-//                .then()
-//                .extract().response();
-//    }
-
     private Pair<Response, Integer>  serenityRestPatchRequest(String url, String requestBody, String token) {
         Response response = SerenityRest.given()
                 .log().all()
@@ -142,15 +103,6 @@ public class RestRequestsStepLibs {
 
         return Pair.of(response, statusCode);
     }
-
-//    private Response serenityRestDeleteRequest(String url, String token) {
-//        return SerenityRest.given()
-//                .contentType("application/json")
-//                .header("Cookie", "token=" + token)
-//                .delete(url)
-//                .then()
-//                .extract().response();
-//    }
 
     private Pair<Response, Integer> serenityRestDeleteRequest(String url, String token) {
         Response response = SerenityRest.given()
@@ -190,14 +142,6 @@ public class RestRequestsStepLibs {
         return  Pair.of(bookingIdsResponse, statusCode);
     }
 
-//    public BookingDetailsResponse getBookingById(int id) throws JsonProcessingException {
-//        String url = hostUrl + environmentVariables.getProperty("get.booking.by.id");
-//        url = url.replace("ID", Integer.toString(id));
-//        String token = getAuthTokenForAdminUser();
-//
-//        return mapper.readValue(serenityRestGetRequest(url, token).getBody().asString(), BookingDetailsResponse.class);
-//    }
-
     public Pair<BookingDetailsResponse, Integer> getBookingById(int id) throws JsonProcessingException {
         String url = hostUrl + environmentVariables.getProperty("get.booking.by.id");
         url = url.replace("ID", Integer.toString(id));
@@ -211,22 +155,13 @@ public class RestRequestsStepLibs {
         return Pair.of(bookingDetails, statusCode);
     }
 
-//    public CreateBookingResponse createNewBooking(String firstname, String lastname, int totalPrice, boolean depositPaid, String checkinDate, String checkoutDate, String additionalNeeds) throws JsonProcessingException {
-//        String url = hostUrl + environmentVariables.getProperty("create.new.booking");
-//        String token = getAuthTokenForAdminUser();
-//
-//        CreateBookingRequest createBookingRequest = BookingTestData.createBookingDetails(firstname, lastname, totalPrice, depositPaid, checkinDate, checkoutDate, additionalNeeds);
-//
-//        return mapper.readValue(serenityPostRequest(url, createBookingRequest, token).getBody().asString(), CreateBookingResponse.class);
-//    }
-
     public Pair<CreateBookingResponse, Integer> createNewBooking(String firstname, String lastname, int totalPrice, boolean depositPaid, String checkinDate, String checkoutDate, String additionalNeeds) throws JsonProcessingException {
         String url = hostUrl + environmentVariables.getProperty("create.new.booking");
         String token = getAuthTokenForAdminUser();
 
-        CreateBookingRequest createBookingRequest = BookingTestData.createBookingDetails(firstname, lastname, totalPrice, depositPaid, checkinDate, checkoutDate, additionalNeeds);
+        CreateBookingRequest newBookingRequestPayload = BookingTestData.createBookingDetails(firstname, lastname, totalPrice, depositPaid, checkinDate, checkoutDate, additionalNeeds);
 
-        Pair<Response, Integer> responsePair = serenityPostRequest(url, createBookingRequest, token);
+        Pair<Response, Integer> responsePair = serenityPostRequest(url, newBookingRequestPayload, token);
         Response response = responsePair.getLeft();
         int statusCode = responsePair.getRight();
 
@@ -234,12 +169,17 @@ public class RestRequestsStepLibs {
         return  Pair.of(createBookingResponse, statusCode);
     }
 
-//    public void deleteBooking(int id) throws JsonProcessingException {
-//        String url = hostUrl + environmentVariables.getProperty("delete.booking");
-//        String token = getAuthTokenForAdminUser();
-//
-//
-//    }
+    public Pair<CreateBookingResponse, Integer> createNewBooking(CreateBookingRequest newBookingRequestPayload) throws JsonProcessingException {
+        String url = hostUrl + environmentVariables.getProperty("create.new.booking");
+        String token = getAuthTokenForAdminUser();
+
+        Pair<Response, Integer> responsePair = serenityPostRequest(url, newBookingRequestPayload, token);
+        Response response = responsePair.getLeft();
+        int statusCode = responsePair.getRight();
+
+        CreateBookingResponse createBookingResponse = mapper.readValue(response.getBody().asString(), CreateBookingResponse.class);
+        return  Pair.of(createBookingResponse, statusCode);
+    }
 
     public Pair<UpdateBookingResponse, Integer> updateBooking(int id, String firstname, String lastname, int totalPrice, boolean depositPaid, String checkinDate, String checkoutDate, String additionalNeeds) throws JsonProcessingException {
         String url = hostUrl + environmentVariables.getProperty("update.booking");
@@ -263,7 +203,6 @@ public class RestRequestsStepLibs {
         url = url.replace("ID", Integer.toString(id));
 
         String token = getAuthTokenForAdminUser();
-//        UpdateBookingRequest updateBookingRequest = BookingTestData.updateBookingDetails(firstname, lastname, totalPrice, depositPaid, checkinDate, checkoutDate, additionalNeeds);
 
         Pair<Response, Integer> responsePair = serenityRestPutRequest(url, partialUpdateFields, token);
         Response response = responsePair.getLeft();
@@ -276,6 +215,7 @@ public class RestRequestsStepLibs {
 
     public Pair<Response, Integer> deleteBooking(int id) throws JsonProcessingException {
         String url = hostUrl + environmentVariables.getProperty("delete.booking");
+        url = url.replace("ID", Integer.toString(id));
         String token = getAuthTokenForAdminUser();
 
         Pair<Response, Integer> responsePair = serenityRestDeleteRequest(url, token);
