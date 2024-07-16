@@ -45,7 +45,7 @@ public class BookingStepDefinition {
         bookingStepLibs.createNewBooking(table);
     }
 
-    @When("I send a GET request with ID of the booking created in the previous step")
+    @When("I send a GET request to the Get Booking by ID endpoint with ID of the booking created in the previous step")
     public void iSendAGETRequestWithIDOfTheBookingCreatedInThePreviousStep() throws JsonProcessingException {
         bookingStepLibs.getBookingById();
     }
@@ -53,5 +53,26 @@ public class BookingStepDefinition {
     @And("get booking by ID response body contains the following details:")
     public void getBookingByIdResponseBodyContainsTheFollowingDetails(DataTable table) {
         bookingStepLibs.validateGetBookingByIdResponseBodyContainsCorrectDetails(table);
+    }
+
+
+    @When("I send a POST request to create a new booking with the following details:")
+    public void iSendAPOSTRequestToCreateANewBookingWithDetails(DataTable table) throws JsonProcessingException {
+        bookingStepLibs.createNewBooking(table);
+    }
+
+    @Then("create new booking response status code is {int} OK")
+    public void createNewBookingResponseStatusCodeIsOK(int expectedStatusCode) {
+        bookingStepLibs.validateCreateNewBookingResponseStatusCode(expectedStatusCode);
+    }
+
+    @And("the response body should contain the following details:")
+    public void theResponseBodyShouldContainTheFollowingDetails(DataTable table) {
+        bookingStepLibs.validateCreateNewBookingResponseBodyContainsCorrectDetails(table);
+    }
+
+    @And("the booking ID should be present in the response")
+    public void theBookingIDShouldBePresentInTheResponse() {
+        bookingStepLibs.validateResponseContainsAnId();
     }
 }

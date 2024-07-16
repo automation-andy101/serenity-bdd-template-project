@@ -12,6 +12,7 @@ import io.cucumber.java.bs.A;
 import net.serenitybdd.annotations.Step;
 import org.apache.commons.lang3.tuple.Pair;
 import org.hamcrest.MatcherAssert;
+import org.hamcrest.Matchers;
 import org.junit.Assert;
 import java.util.List;
 import java.util.Map;
@@ -82,5 +83,28 @@ public class BookingStepLibs {
         MatcherAssert.assertThat(getBookingByIdResp.getLeft().getBookingdates().getCheckin(), equalTo(bookingDetails.get("checkin")));
         MatcherAssert.assertThat(getBookingByIdResp.getLeft().getBookingdates().getCheckout(), equalTo(bookingDetails.get("checkout")));
         MatcherAssert.assertThat(getBookingByIdResp.getLeft().getAdditionalneeds(), equalTo(bookingDetails.get("additionalneeds")));
+    }
+
+    @Step("Validate Create New Booking Response status code is 200")
+    public void validateCreateNewBookingResponseStatusCode(int expectedStatusCode) {
+        MatcherAssert.assertThat(createNewBookingResp.getRight(), equalTo(expectedStatusCode));
+    }
+
+    @Step("Validate Create New Booking Response Body contains the correct details")
+    public void validateCreateNewBookingResponseBodyContainsCorrectDetails(DataTable dataTable) {
+        Map<String, String> bookingDetails = dataTable.asMap(String.class, String.class);
+
+        MatcherAssert.assertThat(createNewBookingResp.getLeft().getBooking().getFirstname(), equalTo(bookingDetails.get("firstname")));
+        MatcherAssert.assertThat(createNewBookingResp.getLeft().getBooking().getLastname(), equalTo(bookingDetails.get("lastname")));
+        MatcherAssert.assertThat(createNewBookingResp.getLeft().getBooking().getTotalprice(), equalTo(Integer.parseInt(bookingDetails.get("totalprice"))));
+        MatcherAssert.assertThat(createNewBookingResp.getLeft().getBooking().isDepositpaid(), equalTo(Boolean.parseBoolean(bookingDetails.get("depositpaid"))));
+        MatcherAssert.assertThat(createNewBookingResp.getLeft().getBooking().getBookingdates().getCheckin(), equalTo(bookingDetails.get("checkin")));
+        MatcherAssert.assertThat(createNewBookingResp.getLeft().getBooking().getBookingdates().getCheckout(), equalTo(bookingDetails.get("checkout")));
+        MatcherAssert.assertThat(createNewBookingResp.getLeft().getBooking().getAdditionalneeds(), equalTo(bookingDetails.get("additionalneeds")));
+    }
+
+    @Step("Validate response contains an ID")
+    public void validateResponseContainsAnId() {
+        MatcherAssert.assertThat(createNewBookingResp.getLeft().getBookingid(), Matchers.notNullValue());
     }
 }
