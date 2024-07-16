@@ -198,6 +198,21 @@ public class RestRequestsStepLibs {
         return Pair.of(updateBookingResponse, statusCode);
     }
 
+    public Pair<UpdateBookingResponse, Integer> updateBooking(int id, UpdateBookingRequest updateBookingRequestPayload) throws JsonProcessingException {
+        String url = hostUrl + environmentVariables.getProperty("update.booking");
+        url = url.replace("ID", Integer.toString(id));
+
+        String token = getAuthTokenForAdminUser();
+
+        Pair<Response, Integer> responsePair = serenityRestPutRequest(url, updateBookingRequestPayload, token);
+        Response response = responsePair.getLeft();
+        int statusCode = responsePair.getRight();
+
+        UpdateBookingResponse updateBookingResponse = mapper.readValue(response.getBody().asString(), UpdateBookingResponse.class);
+
+        return Pair.of(updateBookingResponse, statusCode);
+    }
+
     public Pair<UpdateBookingResponse, Integer> partialUpdateBooking(int id, Map<String, Object> partialUpdateFields) throws JsonProcessingException {
         String url = hostUrl + environmentVariables.getProperty("partial.update.booking");
         url = url.replace("ID", Integer.toString(id));

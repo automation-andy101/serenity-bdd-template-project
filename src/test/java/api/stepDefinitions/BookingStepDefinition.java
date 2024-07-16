@@ -39,7 +39,6 @@ public class BookingStepDefinition {
         bookingStepLibs.validateGetBookingByIdResponseStatusCode(expectedStatusCode);
     }
 
-
     @Given("a new booking has been created with the following details:")
     public void aNewBookingHasBeenCreatedWithTheFollowingDetails(DataTable table) throws JsonProcessingException {
         bookingStepLibs.createNewBooking(table);
@@ -54,7 +53,6 @@ public class BookingStepDefinition {
     public void getBookingByIdResponseBodyContainsTheFollowingDetails(DataTable table) {
         bookingStepLibs.validateGetBookingByIdResponseBodyContainsCorrectDetails(table);
     }
-
 
     @When("I send a POST request to create a new booking with the following details:")
     public void iSendAPOSTRequestToCreateANewBookingWithDetails(DataTable table) throws JsonProcessingException {
@@ -74,5 +72,30 @@ public class BookingStepDefinition {
     @And("the booking ID should be present in the response")
     public void theBookingIDShouldBePresentInTheResponse() {
         bookingStepLibs.validateResponseContainsAnId();
+    }
+
+    @When("I send a PUT request to the update booking endpoint with the following details:")
+    public void iSendAPUTRequestToTheUpdateBookingEndpointWithTheFollowingDetails(DataTable table) throws JsonProcessingException {
+        bookingStepLibs.updateBooking(table);
+    }
+
+    @Then("update booking response status code is {int} OK")
+    public void updateBookingResponseStatusCodeIsOK(int expectedStatusCode) {
+        bookingStepLibs.validateCreateNewBookingResponseStatusCode(expectedStatusCode);
+    }
+
+    @And("the update booking response body should contain the following details:")
+    public void theUpdateBookingResponseBodyShouldContainTheFollowingDetails(DataTable table) {
+        bookingStepLibs.validateUpdateBookingResponseBodyContainsCorrectDetails(table);
+    }
+
+    @When("I send a Delete request to delete the booking created in the previous step")
+    public void iSendADeleteRequestToDeleteTheBookingCreatedInThePreviousStep() throws JsonProcessingException {
+        bookingStepLibs.deleteBooking();
+    }
+
+    @Then("a delete response status code is {int} OK")
+    public void aDeleteResponseStatusCodeIsOK(int expectedStatusCode) {
+        bookingStepLibs.validateDeleteBookingResponseStatusCode(expectedStatusCode);
     }
 }
